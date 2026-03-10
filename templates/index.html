@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Attendance Generator</title>
+
+<style>
+
+body{
+background: linear-gradient(135deg,#0f172a,#1e293b);
+font-family: Arial;
+color:white;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+margin:0;
+}
+
+.container{
+background:#111827;
+padding:40px;
+border-radius:15px;
+text-align:center;
+width:420px;
+box-shadow:0 0 20px rgba(0,0,0,0.6);
+}
+
+h2{
+margin-bottom:20px;
+}
+
+input{
+width:90%;
+padding:10px;
+margin:10px 0;
+border-radius:8px;
+border:none;
+}
+
+button{
+padding:10px 30px;
+margin-top:15px;
+border:none;
+border-radius:8px;
+font-size:16px;
+cursor:pointer;
+}
+
+.generate{
+background:#22c55e;
+color:white;
+}
+
+.sheet{
+background:#3b82f6;
+color:white;
+}
+
+button:hover{
+opacity:0.9;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Attendance Generator</h2>
+
+<!-- Open Google Sheet -->
+<a href="https://docs.google.com/spreadsheets/d/1t1OyQbuq0kD3F9vFpo6c6ScEN-A0UWUGaYQ214qIeXw/edit?usp=sharing" target="_blank">
+<button class="sheet">Open Attendance Format</button>
+</a>
+
+<br><br>
+
+<form action="/generate" method="post" enctype="multipart/form-data">
+
+<input type="text" name="filename"
+placeholder="Enter Month Name (Example: March)" required>
+
+<input type="file" name="file" required>
+
+<button class="generate">Generate Attendance</button>
+
+</form>
+
+</div>
+
+</body>
+
+</html>
