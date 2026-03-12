@@ -1,6 +1,7 @@
 from flask import Flask, request, send_file, render_template
 from attendance_logic import process_attendance
 import os
+import pandas as pd
 import requests
 
 app = Flask(__name__)
@@ -21,14 +22,21 @@ def home():
 @app.route("/extract")
 def extract():
     try:
+        temp_path = os.path.join(UPLOAD_FOLDER, "temp.xlsx")
         input_path = os.path.join(UPLOAD_FOLDER, "input.xlsx")
 
-        # Download the Excel file from Google Sheets
+        # Download Excel file
         response = requests.get(SHEET_URL)
         response.raise_for_status()
 
-        with open(input_path, "wb") as f:
+        with open(temp_path, "wb") as f:
             f.write(response.content)
+
+        # Read without changing structure
+        df = pd.read_excel(temp_path, header=None, dtype=str)
+
+        # Save exactly like original Excel
+        df.to_excel(input_path, index=False, header=False)
 
         return "Attendance data extracted successfully!"
 
