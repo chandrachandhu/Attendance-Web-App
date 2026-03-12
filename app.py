@@ -8,36 +8,40 @@ app = Flask(__name__)
 UPLOAD_FOLDER = "uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-# Google Sheet CSV export link
-SHEET_URL = "https://docs.google.com/spreadsheets/d/1t1OyQbuq0kD3F9vFpo6c6ScEN-A0UWUGaYQ214qIeXw/export?format=csv"
+# ==========================
+# GOOGLE SHEET CSV LINK
+# ==========================
+SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTPYebkj-NlcHEdeEPIZEsEpu2F6qplpVmggh6QWxv1kkgarlWC2WvqXW9_10arvmtlVGFCl-rM3Dwm/pub?output=csv"
+
 
 @app.route("/")
 def home():
     return open("templates/index.html").read()
 
 
-# ==============================
-# Extract data from Google Sheet
-# ==============================
+# ==========================
+# EXTRACT DATA FROM GOOGLE SHEET
+# ==========================
 @app.route("/extract")
 def extract():
 
     try:
+
         df = pd.read_csv(SHEET_URL)
 
         input_path = os.path.join(UPLOAD_FOLDER, "input.xlsx")
 
         df.to_excel(input_path, index=False)
 
-        return "Attendance data extracted successfully"
+        return "Attendance data extracted successfully!"
 
     except Exception as e:
         return f"Error extracting data: {str(e)}"
 
 
-# ==============================
-# Generate attendance
-# ==============================
+# ==========================
+# GENERATE ATTENDANCE FILE
+# ==========================
 @app.route("/generate", methods=["POST"])
 def generate():
 
