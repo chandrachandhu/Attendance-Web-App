@@ -4,3 +4,5 @@ openpyxl
 gunicorn
 pandas
 requests
+openpyxl
+
