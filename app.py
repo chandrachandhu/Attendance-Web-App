@@ -9,7 +9,7 @@ UPLOAD_FOLDER = "uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 # ==========================
-# GOOGLE SHEET CSV LINK
+# GOOGLE SHEET EXCEL LINK
 # ==========================
 SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTPYebkj-NlcHEdeEPIZEsEpu2F6qplpVmggh6QWxv1kkgarlWC2WvqXW9_10arvmtlVGFCl-rM3Dwm/pub?output=xlsx"
 
@@ -27,10 +27,12 @@ def extract():
 
     try:
 
-        df = pd.read_csv(SHEET_URL)
+        # Read Excel file directly from Google Sheet
+        df = pd.read_excel(SHEET_URL)
 
         input_path = os.path.join(UPLOAD_FOLDER, "input.xlsx")
 
+        # Save it locally for processing
         df.to_excel(input_path, index=False)
 
         return "Attendance data extracted successfully!"
@@ -40,7 +42,7 @@ def extract():
 
 
 # ==========================
-# GENERATE ATTENDANCE FILE
+# GENERATE ATTENDANCE
 # ==========================
 @app.route("/generate", methods=["POST"])
 def generate():
