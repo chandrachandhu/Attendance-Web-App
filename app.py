@@ -18,25 +18,27 @@ def home():
     return render_template("index.html")
 
 
-# Extract attendance data from Google Sheet
+# Extract data
 @app.route("/extract")
 def extract():
     try:
+
         temp_path = os.path.join(UPLOAD_FOLDER, "temp.xlsx")
         input_path = os.path.join(UPLOAD_FOLDER, "input.xlsx")
 
-        # Download Excel file
+        # Download Excel from Google Sheets
         response = requests.get(SHEET_URL)
         response.raise_for_status()
 
         with open(temp_path, "wb") as f:
             f.write(response.content)
 
-        # Read without changing structure
+        # Read sheet
         df = pd.read_excel(temp_path, header=None, dtype=str)
 
-        # Save exactly like original Excel
-        df.to_excel(input_path, index=False, header=False)
+        # Save with correct sheet name
+        with pd.ExcelWriter(input_path, engine="openpyxl") as writer:
+            df.to_excel(writer, sheet_name="Sheet2", index=False, header=False)
 
         return "Attendance data extracted successfully!"
 
@@ -44,19 +46,20 @@ def extract():
         return f"Error extracting data: {str(e)}"
 
 
-# Generate attendance file
+# Generate attendance
 @app.route("/generate", methods=["POST"])
 def generate():
     try:
+
         filename = request.form["filename"]
 
         input_path = os.path.join(UPLOAD_FOLDER, "input.xlsx")
+
         output_path = os.path.join(
             UPLOAD_FOLDER,
             f"{filename}_attendance.xlsx"
         )
 
-        # Run your existing attendance logic
         process_attendance(input_path, output_path)
 
         return send_file(output_path, as_attachment=True)
